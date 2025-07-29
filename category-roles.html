@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>👑 Role Management Commands - TheoBot Documentation - theobott.com</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #f59e0b;
+            --success-color: #10b981;
+            --danger-color: #ef4444;
+            --warning-color: #f59e0b;
+            --info-color: #3b82f6;
+            --dark-color: #1f2937;
+            --light-color: #f9fafb;
+            --border-color: #e5e7eb;
+            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-secondary: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+            --gradient-accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            line-height: 1.6; 
+            color: var(--dark-color); 
+            background: var(--gradient-primary);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .navbar { 
+            background: rgba(255, 255, 255, 0.95); 
+            backdrop-filter: blur(20px); 
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2); 
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); 
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .navbar-brand { 
+            font-weight: 800; 
+            font-size: 1.8rem; 
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .nav-link { 
+            font-weight: 600; 
+            color: var(--dark-color) !important; 
+            transition: all 0.3s ease; 
+            position: relative;
+            padding: 0.5rem 1rem !important;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        
+        .nav-link:hover::after {
+            width: 80%;
+        }
+        
+        .nav-link:hover { 
+            color: var(--primary-color) !important; 
+            transform: translateY(-2px);
+        }
+        
+        .main-content { 
+            background: rgba(255, 255, 255, 0.95); 
+            backdrop-filter: blur(20px); 
+            border-radius: 30px; 
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15); 
+            margin: 2rem auto; 
+            padding: 3rem; 
+            max-width: 1400px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .category-header { 
+            text-align: center; 
+            padding: 3rem 0; 
+            background: var(--gradient-secondary);
+            color: white; 
+            border-radius: 25px; 
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .category-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        .category-title { 
+            font-size: 2.5rem; 
+            font-weight: 700; 
+            margin-bottom: 1rem;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .category-subtitle { 
+            font-size: 1.1rem; 
+            opacity: 0.9; 
+            margin-bottom: 1.5rem;
+            font-weight: 400;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .command-card { 
+            background: white; 
+            border-radius: 20px; 
+            padding: 2rem; 
+            margin-bottom: 2rem; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); 
+            transition: box-shadow 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .command-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-primary);
+            transform: scaleX(0);
+            transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .command-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .command-card:hover { 
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12); 
+        }
+        
+        .command-name { 
+            font-size: 1.3rem; 
+            font-weight: 600; 
+            margin-bottom: 0.5rem; 
+            color: var(--dark-color);
+        }
+        
+        /* Style for the text part of command names (excluding emoji) */
+        .command-name-text {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .command-description { 
+            color: #6b7280; 
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+        
+        .command-usage { 
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8f2ff 100%); 
+            padding: 1rem; 
+            border-radius: 15px; 
+            font-family: 'Courier New', monospace; 
+            font-size: 0.95rem; 
+            margin-bottom: 1rem;
+            border: 1px solid #e3f2fd;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .command-example { 
+            background: linear-gradient(135deg, #fff8f0 0%, #fff2e6 100%); 
+            padding: 1rem; 
+            border-radius: 15px; 
+            font-family: 'Courier New', monospace; 
+            font-size: 0.95rem; 
+            color: var(--primary-color);
+            border: 1px solid #ffd54f;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .role-badge { 
+            display: inline-block; 
+            padding: 0.5rem 1rem; 
+            border-radius: 25px; 
+            font-size: 0.9rem; 
+            font-weight: 600; 
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+        
+        .role-badge:hover {
+            transform: scale(1.1);
+        }
+        
+        .role-everyone { background: linear-gradient(135deg, #d1fae5, #a7f3d0); color: #065f46; }
+        .role-moderator { background: linear-gradient(135deg, #dbeafe, #bfdbfe); color: #1e40af; }
+        .role-senior-admin { background: linear-gradient(135deg, #fef3c7, #fde68a); color: #92400e; }
+        .role-co-owner { background: linear-gradient(135deg, #f3e8ff, #e9d5ff); color: #7c3aed; }
+        .role-owner { background: linear-gradient(135deg, #fecaca, #fca5a5); color: #991b1b; }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        .search-container { 
+            margin-bottom: 3rem; 
+        }
+        
+        .search-input { 
+            border-radius: 25px; 
+            border: 2px solid var(--border-color); 
+            padding: 1rem 1.5rem; 
+            font-size: 1.1rem; 
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+        
+        .search-input:focus { 
+            border-color: var(--primary-color); 
+            box-shadow: 0 0 0 0.3rem rgba(99, 102, 241, 0.25); 
+            transform: scale(1.02);
+        }
+        
+        .btn-primary { 
+            background: var(--gradient-primary); 
+            border: none; 
+            border-radius: 25px; 
+            padding: 1rem 2rem; 
+            font-weight: 600; 
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+        
+        .btn-primary:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4); 
+        }
+        
+        .btn-outline-primary {
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            font-weight: 600;
+            border-radius: 20px;
+            padding: 0.75rem 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-outline-primary:hover {
+            background: var(--gradient-primary);
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+        }
+        
+        .breadcrumb { 
+            background: transparent; 
+            padding: 0; 
+            margin-bottom: 2rem; 
+        }
+        
+        .breadcrumb-item a { 
+            color: var(--primary-color); 
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .breadcrumb-item a:hover {
+            color: var(--secondary-color);
+            transform: translateX(2px);
+        }
+        
+        .breadcrumb-item.active { 
+            color: var(--dark-color);
+            font-weight: 600;
+        }
+        
+        .navbar-nav { margin-left: auto !important; padding-right: 0 !important; }
+        .navbar .navbar-collapse { margin-left: auto !important; }
+        .navbar-brand { margin-left: 2rem !important; }
+        .navbar-nav.ms-auto { margin-left: auto !important; padding-right: 3rem !important; }
+        .navbar .navbar-collapse { justify-content: flex-end; }
+        .navbar .navbar-nav { margin-left: 0 !important; }
+        .navbar .container { max-width: 100% !important; padding-left: 1rem !important; padding-right: 1rem !important; }
+        
+        /* Animation for command cards */
+        .command-card {
+            animation: fadeInUp 0.6s ease forwards;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .command-card:nth-child(1) { animation-delay: 0.1s; }
+        .command-card:nth-child(2) { animation-delay: 0.2s; }
+        .command-card:nth-child(3) { animation-delay: 0.3s; }
+        .command-card:nth-child(4) { animation-delay: 0.4s; }
+        .command-card:nth-child(5) { animation-delay: 0.5s; }
+        .command-card:nth-child(6) { animation-delay: 0.6s; }
+        .command-card:nth-child(7) { animation-delay: 0.7s; }
+        .command-card:nth-child(8) { animation-delay: 0.8s; }
+        .command-card:nth-child(9) { animation-delay: 0.9s; }
+        .command-card:nth-child(10) { animation-delay: 1.0s; }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Back to top button */
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        @media (max-width: 768px) {
+            .category-title { 
+                font-size: 2rem; 
+                margin-bottom: 1rem;
+            }
+            .category-subtitle {
+                font-size: 1rem;
+                margin-bottom: 1.5rem;
+            }
+            .main-content { 
+                margin: 0.5rem; 
+                padding: 1rem; 
+                border-radius: 15px;
+            }
+            .command-card { 
+                padding: 1.5rem; 
+                margin-bottom: 1rem;
+            }
+            .category-header {
+                padding: 2rem 1rem;
+                border-radius: 15px;
+                position: relative;
+                overflow: hidden;
+            }
+            .category-header::before {
+                content: '';
+                position: absolute;
+                top: -50%;
+                left: -50%;
+                width: 200%;
+                height: 200%;
+                background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+                animation: float 6s ease-in-out infinite;
+            }
+            .category-header .row {
+                margin: 0;
+            }
+            .category-header .col-lg-6 {
+                margin-bottom: 2rem;
+            }
+            .navbar-brand {
+                font-size: 1.5rem;
+            }
+            .navbar-collapse {
+                position: fixed !important;
+                top: 100% !important;
+                left: 0 !important;
+                right: 0 !important;
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(20px);
+                border-top: 1px solid rgba(255, 255, 255, 0.2);
+                padding: 1rem;
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            }
+            .navbar-nav {
+                text-align: center;
+            }
+            .nav-link {
+                padding: 0.75rem 1rem !important;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            }
+            .nav-link:last-child {
+                border-bottom: none;
+            }
+            .search-container {
+                margin-bottom: 2rem;
+                padding: 1rem;
+                background: rgba(255, 255, 255, 0.8);
+                border-radius: 15px;
+                border: 1px solid rgba(0, 0, 0, 0.1);
+            }
+            .search-input {
+                font-size: 1rem;
+                padding: 1rem 1.5rem;
+                border: 2px solid var(--border-color);
+            }
+            .search-input:focus {
+                border-color: var(--primary-color);
+                box-shadow: 0 0 0 0.3rem rgba(99, 102, 241, 0.25);
+            }
+            .btn {
+                padding: 0.75rem 1.5rem;
+                font-size: 0.9rem;
+            }
+            .btn-lg {
+                padding: 1rem 2rem;
+                font-size: 1rem;
+            }
+            .card-body {
+                padding: 1.5rem;
+            }
+            .command-name {
+                font-size: 1.3rem;
+            }
+            .command-description {
+                font-size: 0.9rem;
+            }
+            .command-usage, .command-example {
+                font-size: 0.9rem;
+                padding: 0.75rem;
+            }
+            .role-badge {
+                font-size: 0.8rem;
+                padding: 0.4rem 0.8rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .category-title { 
+                font-size: 1.8rem; 
+            }
+            .category-subtitle {
+                font-size: 0.9rem;
+            }
+            .main-content { 
+                margin: 0.25rem; 
+                padding: 0.75rem; 
+            }
+            .category-header {
+                padding: 1.5rem 0.75rem;
+                position: relative;
+                overflow: hidden;
+            }
+            .category-header::before {
+                content: '';
+                position: absolute;
+                top: -50%;
+                left: -50%;
+                width: 200%;
+                height: 200%;
+                background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+                animation: float 6s ease-in-out infinite;
+            }
+            .command-card { 
+                padding: 1rem; 
+            }
+            .btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.85rem;
+            }
+            .btn-lg {
+                padding: 0.75rem 1.5rem;
+                font-size: 0.9rem;
+            }
+            .search-container {
+                margin-bottom: 1.5rem;
+                padding: 0.75rem;
+            }
+            .search-input {
+                font-size: 0.9rem;
+                padding: 0.75rem 1rem;
+            }
+            .card-body {
+                padding: 1rem;
+            }
+            .command-name {
+                font-size: 1.1rem;
+            }
+            .command-description {
+                font-size: 0.8rem;
+            }
+            .command-usage, .command-example {
+                font-size: 0.8rem;
+                padding: 0.5rem;
+            }
+            .role-badge {
+                font-size: 0.7rem;
+                padding: 0.3rem 0.6rem;
+            }
+        }
+
+        /* Desktop styles to maintain original layout */
+        @media (min-width: 769px) {
+            .search-container {
+                margin-bottom: 3rem;
+                padding: 0;
+                background: transparent;
+                border: none;
+            }
+            
+            .search-input {
+                border-radius: 25px;
+                border: 2px solid var(--border-color);
+                padding: 1rem 1.5rem;
+                font-size: 1.1rem;
+            }
+            
+            .search-input:focus {
+                border-color: var(--primary-color);
+                box-shadow: 0 0 0 0.3rem rgba(99, 102, 241, 0.25);
+                transform: scale(1.02);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light position-relative">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-robot me-2"></i>TheoBot
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav" style="position: absolute; right: 2rem; top: 0; height: 100%; display: flex; align-items: center;">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#commands">Commands</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#contact">Contact</a>
+                    </li>
+                </ul>
+                    </div>
+    </nav>
+    <div class="container">
+        <div class="main-content">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item active">👑 Role Management Commands</li>
+                </ol>
+            </nav>
+                        <!-- Category Header -->
+            <div class="category-header">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6 text-lg-start text-center">
+                            <h1 class="category-title">👑 Role Commands</h1>
+                            <p class="category-subtitle">Manage user roles and permissions with flexible role system. Assign, remove, and manage user roles with hierarchical permissions.</p>
+                            <div class="d-flex flex-wrap gap-3 justify-content-lg-start justify-content-center">
+                                <div class="badge bg-light text-dark fs-6 px-3 py-2" style="border-radius: 25px;">
+                                    <i class="fas fa-terminal me-2"></i>8 Commands
+                                </div>
+                                <div class="badge bg-light text-dark fs-6 px-3 py-2" style="border-radius: 25px;">
+                                    <i class="fas fa-users me-2"></i>Permission Management
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 text-center">
+                            <i class="fas fa-crown" style="font-size: 6rem; color: rgba(255,255,255,0.8); text-shadow: 0 4px 8px rgba(0,0,0,0.3);"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Search within category -->
+            <div class="search-container">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <input type="text" class="form-control search-input" id="categorySearchInput" placeholder="Search commands in this category...">
+                            <button class="btn btn-primary" type="button">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Role Permissions Overview -->
+            <div class="row mb-5">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="fas fa-shield-alt text-primary me-2"></i>Role Permissions Overview</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-6 mb-4">
+                                    <div class="role-permission-card">
+                                        <div class="d-flex align-items-center mb-3">
+                                            <span class="role-badge role-moderator me-3">Moderator</span>
+                                            <h6 class="mb-0">🛠️ Basic Moderation</h6>
+                                        </div>
+                                        <ul class="list-unstyled">
+                                            <li><i class="fas fa-check text-success me-2"></i>Dance & Emote Controls</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>User Movement (Goto, Bring, Tele, Flash)</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Room Moderation (kick, Ban, Mute, Freeze)</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Reactions</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 mb-4">
+                                    <div class="role-permission-card">
+                                        <div class="d-flex align-items-center mb-3">
+                                            <span class="role-badge role-senior-admin me-3">Senior Admin</span>
+                                            <h6 class="mb-0">🦅 Advanced Management</h6>
+                                        </div>
+                                        <ul class="list-unstyled">
+                                            <li><i class="fas fa-check text-success me-2"></i>All Moderator permissions</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Teleport Management</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Loop Messages & Cooldowns</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Join/Leave Messages</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 mb-4">
+                                    <div class="role-permission-card">
+                                        <div class="d-flex align-items-center mb-3">
+                                            <span class="role-badge role-co-owner me-3">Co-owner</span>
+                                            <h6 class="mb-0">🛡️ System Control</h6>
+                                        </div>
+                                        <ul class="list-unstyled">
+                                            <li><i class="fas fa-check text-success me-2"></i>All Senior Admin permissions</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>VIP Management</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Broadcast Messages</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Tip System Management</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Dancefloor Setup</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Chat & Time Clearing</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 mb-4">
+                                    <div class="role-permission-card">
+                                        <div class="d-flex align-items-center mb-3">
+                                            <span class="role-badge role-owner me-3">Owner</span>
+                                            <h6 class="mb-0">👑 Full Control</h6>
+                                        </div>
+                                        <ul class="list-unstyled">
+                                            <li><i class="fas fa-check text-success me-2"></i>All Co-owner permissions</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Role Assignment & Management</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Bot Room & Restart Control</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Bot Outfit Management</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Complete System Access</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="alert alert-info mt-3">
+                                <i class="fas fa-info-circle me-2"></i>
+                                <strong>Note:</strong> Role permissions are hierarchical - higher roles inherit all permissions from lower roles. Only Owners can assign and remove roles.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Commands List -->
+            <div class="row">
+
+            <div class="col-12 mb-4 command-item" id="command-rolelist">
+                <div class="command-card">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h3 class="command-name">👑 <span class="command-name-text">!Rolelist</span></h3>
+                            <p class="command-description"></p>
+                            <div class="mb-2"><div class="command-usage"><strong>Usage:</strong><br>Show all users and their roles</div></div>
+                            <div class="mb-2"><div class="command-example"><strong>Example:</strong><br>!rolelist</div></div>
+                        </div>
+                        <div class="col-md-4 text-md-end">
+                            <div class="mb-3">
+                                <strong>Required Role:</strong><br>
+                                <span class="role-badge role-moderator">Moderator+</span>
+                            </div>
+                            <button class="btn btn-outline-primary btn-sm copy-command" data-command="👑 !Rolelist">
+                                <i class="fas fa-copy me-1"></i>Copy Command
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 mb-4 command-item" id="command-giverole">
+                <div class="command-card">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h3 class="command-name">👑 <span class="command-name-text">!Giverole</span></h3>
+                            <p class="command-description"></p>
+                            <div class="mb-2"><div class="command-usage"><strong>Usage:</strong><br>Assign a role to a user<br>!giverole @username (senioradmin/coowner/owner)</div></div>
+                            <div class="mb-2"><div class="command-example"><strong>Example:</strong><br>!giverole @IITheoII owner</div></div>
+                        </div>
+                        <div class="col-md-4 text-md-end">
+                            <div class="mb-3">
+                                <strong>Required Role:</strong><br>
+                                <span class="role-badge role-owner">Owner</span>
+                            </div>
+                            <button class="btn btn-outline-primary btn-sm copy-command" data-command="👑 !Giverole">
+                                <i class="fas fa-copy me-1"></i>Copy Command
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 mb-4 command-item" id="command-removerole">
+                <div class="command-card">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h3 class="command-name">👑 <span class="command-name-text">!Removerole</span></h3>
+                            <p class="command-description"></p>
+                            <div class="mb-2"><div class="command-usage"><strong>Usage:</strong><br>Remove role from a user</div></div>
+                            <div class="mb-2"><div class="command-example"><strong>Example:</strong><br>!removerole @IITheoII</div></div>
+                        </div>
+                        <div class="col-md-4 text-md-end">
+                            <div class="mb-3">
+                                <strong>Required Role:</strong><br>
+                                <span class="role-badge role-owner">Owner</span>
+                            </div>
+                            <button class="btn btn-outline-primary btn-sm copy-command" data-command="👑 !Removerole">
+                                <i class="fas fa-copy me-1"></i>Copy Command
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 mb-4 command-item" id="command-clearroles">
+                <div class="command-card">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h3 class="command-name">👑 <span class="command-name-text">!Clearroles</span></h3>
+                            <p class="command-description"></p>
+                            <div class="mb-2"><div class="command-usage"><strong>Usage:</strong><br>Clear all user roles</div></div>
+                            <div class="mb-2"><div class="command-example"><strong>Example:</strong><br>!clearroles</div></div>
+                        </div>
+                        <div class="col-md-4 text-md-end">
+                            <div class="mb-3">
+                                <strong>Required Role:</strong><br>
+                                <span class="role-badge role-owner">Owner</span>
+                            </div>
+                            <button class="btn btn-outline-primary btn-sm copy-command" data-command="👑 !Clearroles">
+                                <i class="fas fa-copy me-1"></i>Copy Command
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <!-- Category Navigation -->
+            <div class="row mt-5">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h5><i class="fas fa-arrow-left text-primary me-2"></i>Explore Other Categories</h5>
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <a href="index.html" class="btn btn-outline-primary">
+                                        <i class="fas fa-home me-2"></i>Back to Home
+                                    </a>
+                                </div>
+                                <div class="col-md-6">
+                                    <a href="index.html#commands" class="btn btn-outline-secondary">
+                                        <i class="fas fa-list me-2"></i>All Categories
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Role Legend -->
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="fas fa-info-circle text-primary me-2"></i>Role Legend</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row text-center">
+                                <div class="col-md-2">
+                                    <div class="role-badge role-owner">Owner</div>
+                                    <small class="text-muted d-block mt-1">Full Access</small>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="role-badge role-co-owner">Co-owner</div>
+                                    <small class="text-muted d-block mt-1">Advanced Access</small>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="role-badge role-senior-admin">Senior Admin</div>
+                                    <small class="text-muted d-block mt-1">Admin Access</small>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="role-badge role-moderator">Moderator</div>
+                                    <small class="text-muted d-block mt-1">Mod Access</small>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="role-badge role-everyone">Everyone</div>
+                                    <small class="text-muted d-block mt-1">Basic Access</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="btn btn-primary back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Category search functionality with enhanced features
+            const searchInput = document.getElementById('categorySearchInput');
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    const query = this.value.toLowerCase();
+                    const commandItems = document.querySelectorAll('.command-item');
+                    let visibleCount = 0;
+                    
+                    commandItems.forEach(item => {
+                        const commandName = item.querySelector('.command-name').textContent.toLowerCase();
+                        const commandDesc = item.querySelector('.command-description').textContent.toLowerCase();
+                        const commandUsage = item.querySelector('.command-usage')?.textContent.toLowerCase() || '';
+                        const commandExample = item.querySelector('.command-example')?.textContent.toLowerCase() || '';
+                        
+                        if (commandName.includes(query) || commandDesc.includes(query) || commandUsage.includes(query) || commandExample.includes(query)) {
+                            item.style.display = 'block';
+                            visibleCount++;
+                            // Add highlight effect
+                            item.style.animation = 'fadeInUp 0.3s ease forwards';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                    
+                    // Show/hide no results message
+                    const noResults = document.getElementById('noResults');
+                    if (visibleCount === 0 && query.length > 0) {
+                        if (!noResults) {
+                            const noResultsDiv = document.createElement('div');
+                            noResultsDiv.id = 'noResults';
+                            noResultsDiv.className = 'col-12 text-center py-5';
+                            noResultsDiv.innerHTML = `
+                                <div class="alert alert-info" style="border-radius: 15px; background: linear-gradient(135deg, #f8f9ff 0%, #e8f2ff 100%); border: 1px solid #e3f2fd;">
+                                    <i class="fas fa-search me-2"></i>
+                                    No commands found matching "${query}". Try a different search term.
+                                </div>
+                            `;
+                            document.querySelector('.row').appendChild(noResultsDiv);
+                        }
+                    } else if (noResults) {
+                        noResults.remove();
+                    }
+                });
+                
+                // Add search suggestions
+                searchInput.addEventListener('focus', function() {
+                    this.style.transform = 'scale(1.02)';
+                });
+                
+                searchInput.addEventListener('blur', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            }
+            
+            // Enhanced copy command functionality
+            document.querySelectorAll('.copy-command').forEach(button => {
+                button.addEventListener('click', function() {
+                    const command = this.getAttribute('data-command');
+                    navigator.clipboard.writeText(command).then(() => {
+                        const originalText = this.innerHTML;
+                        this.innerHTML = '<i class="fas fa-check me-1"></i>Copied!';
+                        this.classList.remove('btn-outline-primary');
+                        this.classList.add('btn-success');
+                        
+                        // Add success animation
+                        this.style.transform = 'scale(1.1)';
+                        setTimeout(() => {
+                            this.style.transform = 'scale(1)';
+                        }, 200);
+                        
+                        setTimeout(() => {
+                            this.innerHTML = originalText;
+                            this.classList.remove('btn-success');
+                            this.classList.add('btn-outline-primary');
+                        }, 2000);
+                    }).catch(() => {
+                        // Fallback for older browsers
+                        const textArea = document.createElement('textarea');
+                        textArea.value = command;
+                        document.body.appendChild(textArea);
+                        textArea.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(textArea);
+                        
+                        const originalText = this.innerHTML;
+                        this.innerHTML = '<i class="fas fa-check me-1"></i>Copied!';
+                        this.classList.remove('btn-outline-primary');
+                        this.classList.add('btn-success');
+                        setTimeout(() => {
+                            this.innerHTML = originalText;
+                            this.classList.remove('btn-success');
+                            this.classList.add('btn-outline-primary');
+                        }, 2000);
+                    });
+                });
+            });
+            
+            // Back to top button functionality
+            const backToTopButton = document.getElementById('backToTop');
+            
+            window.addEventListener('scroll', function() {
+                if (window.pageYOffset > 300) {
+                    backToTopButton.style.display = 'block';
+                } else {
+                    backToTopButton.style.display = 'none';
+                }
+            });
+            
+            backToTopButton.addEventListener('click', function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+            
+            // Add hover effects for command cards
+            document.querySelectorAll('.command-card').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-8px) scale(1.02)';
+                    this.style.boxShadow = '0 15px 35px rgba(0,0,0,0.15)';
+                });
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                    this.style.boxShadow = '0 10px 30px rgba(0,0,0,0.08)';
+                });
+            });
+            
+            // Add loading animation
+            window.addEventListener('load', function() {
+                document.body.style.opacity = '0';
+                document.body.style.transition = 'opacity 0.5s ease-in-out';
+                setTimeout(() => {
+                    document.body.style.opacity = '1';
+                }, 100);
+            });
+            
+            // Handle command highlighting from URL hash
+            if (window.location.hash.startsWith('#command-')) {
+                const el = document.querySelector(window.location.hash);
+                if (el) {
+                    el.style.transition = 'background 0.5s';
+                    el.style.background = '#a7ffb0'; // green highlight
+                    setTimeout(() => {
+                        el.style.background = '';
+                    }, 2000);
+                    el.scrollIntoView({behavior: 'smooth', block: 'center'});
+                }
+            }
+        });
+    </script>
+</body>
+</html>
