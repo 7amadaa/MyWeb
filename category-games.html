@@ -133,10 +133,10 @@
             width: 200%;
             height: 200%;
             background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: float 6s ease-in-out infinite;
+            animation: floating 6s ease-in-out infinite;
         }
         
-        @keyframes float {
+        @keyframes floating {
             0%, 100% { transform: translateY(0px) rotate(0deg); }
             50% { transform: translateY(-20px) rotate(180deg); }
         }
@@ -421,7 +421,7 @@
                 width: 200%;
                 height: 200%;
                 background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-                animation: float 6s ease-in-out infinite;
+                animation: floating 6s ease-in-out infinite;
             }
             .category-header .row {
                 margin: 0;
@@ -520,7 +520,7 @@
                 width: 200%;
                 height: 200%;
                 background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-                animation: float 6s ease-in-out infinite;
+                animation: floating 6s ease-in-out infinite;
             }
             .command-card { 
                 padding: 1rem; 
@@ -587,15 +587,15 @@
 <body>
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light position-relative">
-        <div class="container-fluid d-flex justify-content-between align-items-center">
+        <div class="container-fluid">
             <a class="navbar-brand" href="index.html">
                 <i class="fas fa-robot me-2"></i>TheoBot
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav" style="position: absolute; right: 2rem; top: 0; height: 100%; display: flex; align-items: center;">
-                <ul class="navbar-nav">
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="index.html">Home</a>
                     </li>
@@ -643,10 +643,10 @@
             <!-- Search within category -->
             <div class="search-container">
                 <div class="row justify-content-center">
-                    <div class="col-md-8">
-                        <div class="input-group">
-                            <input type="text" class="form-control search-input" id="categorySearchInput" placeholder="Search commands in this category...">
-                            <button class="btn btn-primary" type="button">
+                    <div class="col-lg-8 col-md-10 col-12">
+                        <div class="input-group input-group-lg">
+                            <input type="text" class="form-control search-input" id="categorySearchInput" placeholder="Search commands in this category..." style="border-radius: 25px 0 0 25px;">
+                            <button class="btn btn-primary" type="button" style="border-radius: 0 25px 25px 0;">
                                 <i class="fas fa-search"></i>
                             </button>
                         </div>
