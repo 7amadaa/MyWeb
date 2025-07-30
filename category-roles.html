@@ -254,8 +254,299 @@
         .role-co-owner { background: linear-gradient(135deg, #f3e8ff, #e9d5ff); color: #7c3aed; }
         .role-owner { background: linear-gradient(135deg, #fecaca, #fca5a5); color: #991b1b; }
         
+        /* Role Permissions Overview Styles */
+        .permissions-overview-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+            margin-bottom: 3rem;
+        }
         
+        .permissions-header {
+            background: var(--gradient-secondary);
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
         
+        .permissions-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: floating 6s ease-in-out infinite;
+        }
+        
+        .permissions-title {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .permissions-icon {
+            font-size: 3rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 1rem;
+            display: block;
+        }
+        
+        .permissions-title h2 {
+            color: white;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        .permissions-title p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+            margin: 0;
+            font-weight: 400;
+        }
+        
+        .permissions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 3rem 2rem;
+        }
+        
+        .permission-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .permission-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            transform: scaleX(0);
+            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .moderator-card::before { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+        .senior-admin-card::before { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .co-owner-card::before { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+        .owner-card::before { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        
+        .permission-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .permission-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .permission-card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+            gap: 1rem;
+        }
+        
+        .role-icon {
+            font-size: 2.5rem;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 15px;
+            background: rgba(99, 102, 241, 0.1);
+        }
+        
+        .moderator-card .role-icon { background: rgba(59, 130, 246, 0.1); }
+        .senior-admin-card .role-icon { background: rgba(245, 158, 11, 0.1); }
+        .co-owner-card .role-icon { background: rgba(139, 92, 246, 0.1); }
+        .owner-card .role-icon { background: rgba(239, 68, 68, 0.1); }
+        
+        .role-info {
+            flex: 1;
+        }
+        
+        .role-info h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--dark-color);
+            margin: 0.5rem 0 0 0;
+        }
+        
+        .permission-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .permission-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            border-radius: 10px;
+            background: rgba(16, 185, 129, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .permission-item:hover {
+            background: rgba(16, 185, 129, 0.1);
+            transform: translateX(5px);
+        }
+        
+        .permission-item i {
+            color: var(--success-color);
+            font-size: 1.1rem;
+            min-width: 20px;
+        }
+        
+        .permission-item span {
+            font-weight: 500;
+            color: var(--dark-color);
+            line-height: 1.4;
+        }
+        
+        .permissions-note {
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+            padding: 2rem;
+            border-top: 1px solid rgba(59, 130, 246, 0.2);
+        }
+        
+        .note-content {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .note-content i {
+            color: var(--info-color);
+            font-size: 1.5rem;
+            margin-top: 0.25rem;
+            flex-shrink: 0;
+        }
+        
+        .note-content div {
+            color: var(--dark-color);
+            font-weight: 500;
+            line-height: 1.6;
+        }
+        
+        .note-content strong {
+            color: var(--info-color);
+        }
+        
+        /* Animation for permission cards */
+        .permission-card {
+            animation: fadeInUp 0.6s ease forwards;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .permission-card:nth-child(1) { animation-delay: 0.1s; }
+        .permission-card:nth-child(2) { animation-delay: 0.2s; }
+        .permission-card:nth-child(3) { animation-delay: 0.3s; }
+        .permission-card:nth-child(4) { animation-delay: 0.4s; }
+        
+        /* Responsive design for permissions */
+        @media (max-width: 768px) {
+            .permissions-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+                padding: 2rem 1rem;
+            }
+            
+            .permissions-header {
+                padding: 2rem 1rem;
+            }
+            
+            .permissions-title h2 {
+                font-size: 2rem;
+            }
+            
+            .permissions-title p {
+                font-size: 1rem;
+            }
+            
+            .permission-card {
+                padding: 1.5rem;
+            }
+            
+            .permission-card-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.5rem;
+            }
+            
+            .role-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 2rem;
+            }
+            
+            .role-info h3 {
+                font-size: 1.2rem;
+            }
+            
+            .permissions-note {
+                padding: 1.5rem;
+            }
+            
+            .note-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.5rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .permissions-grid {
+                padding: 1.5rem 0.75rem;
+            }
+            
+            .permissions-header {
+                padding: 1.5rem 0.75rem;
+            }
+            
+            .permissions-title h2 {
+                font-size: 1.8rem;
+            }
+            
+            .permission-card {
+                padding: 1rem;
+            }
+            
+            .role-icon {
+                width: 45px;
+                height: 45px;
+                font-size: 1.8rem;
+            }
+            
+            .permission-item {
+                padding: 0.5rem;
+                gap: 0.5rem;
+            }
+            
+            .permission-item span {
+                font-size: 0.9rem;
+            }
+        }
         
         
         
@@ -664,75 +955,149 @@
             <!-- Role Permissions Overview -->
             <div class="row mb-5">
                 <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="mb-0"><i class="fas fa-shield-alt text-primary me-2"></i>Role Permissions Overview</h5>
+                    <div class="permissions-overview-card">
+                        <div class="permissions-header">
+                            <div class="permissions-title">
+                                <i class="fas fa-shield-alt permissions-icon"></i>
+                                <h2>Role Permissions Overview</h2>
+                                <p>Understanding the hierarchical permission system</p>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-lg-6 mb-4">
-                                    <div class="role-permission-card">
-                                        <div class="d-flex align-items-center mb-3">
-                                            <span class="role-badge role-moderator me-3">Moderator</span>
-                                            <h6 class="mb-0">🛠️ Basic Moderation</h6>
-                                        </div>
-                                        <ul class="list-unstyled">
-                                            <li><i class="fas fa-check text-success me-2"></i>Dance & Emote Controls</li>
-                                            <li><i class="fas fa-check text-success me-2"></i>User Movement (Goto, Bring, Tele, Flash)</li>
-                                            <li><i class="fas fa-check text-success me-2"></i>Room Moderation (kick, Ban, Mute, Freeze)</li>
-                                            <li><i class="fas fa-check text-success me-2"></i>Reactions</li>
-                                        </ul>
+                        <div class="permissions-grid">
+                            <!-- Moderator Role -->
+                            <div class="permission-card moderator-card">
+                                <div class="permission-card-header">
+                                    <div class="role-icon">🛠️</div>
+                                    <div class="role-info">
+                                        <span class="role-badge role-moderator">Moderator</span>
+                                        <h3>Basic Moderation</h3>
                                     </div>
                                 </div>
-                                <div class="col-lg-6 mb-4">
-                                    <div class="role-permission-card">
-                                        <div class="d-flex align-items-center mb-3">
-                                            <span class="role-badge role-senior-admin me-3">Senior Admin</span>
-                                            <h6 class="mb-0">🦅 Advanced Management</h6>
-                                        </div>
-                                        <ul class="list-unstyled">
-                                            <li><i class="fas fa-check text-success me-2"></i>All Moderator permissions</li>
-                                            <li><i class="fas fa-check text-success me-2"></i>Teleport Management</li>
-                                            <li><i class="fas fa-check text-success me-2"></i>Loop Messages & Cooldowns</li>
-                                            <li><i class="fas fa-check text-success me-2"></i>Join/Leave Messages</li>
-                                        </ul>
+                                <div class="permission-list">
+                                    <div class="permission-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Dance & Emote Controls</span>
                                     </div>
-                                </div>
-                                <div class="col-lg-6 mb-4">
-                                    <div class="role-permission-card">
-                                        <div class="d-flex align-items-center mb-3">
-                                            <span class="role-badge role-co-owner me-3">Co-owner</span>
-                                            <h6 class="mb-0">🛡️ System Control</h6>
-                                        </div>
-                                        <ul class="list-unstyled">
-                                            <li><i class="fas fa-check text-success me-2"></i>All Senior Admin permissions</li>
-                                            <li><i class="fas fa-check text-success me-2"></i>VIP Management</li>
-                                            <li><i class="fas fa-check text-success me-2"></i>Broadcast Messages</li>
-                                            <li><i class="fas fa-check text-success me-2"></i>Tip System Management</li>
-                                            <li><i class="fas fa-check text-success me-2"></i>Dancefloor Setup</li>
-                                            <li><i class="fas fa-check text-success me-2"></i>Chat & Time Clearing</li>
-                                        </ul>
+                                    <div class="permission-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>User Movement (Goto, Bring, Tele, Flash)</span>
                                     </div>
-                                </div>
-                                <div class="col-lg-6 mb-4">
-                                    <div class="role-permission-card">
-                                        <div class="d-flex align-items-center mb-3">
-                                            <span class="role-badge role-owner me-3">Owner</span>
-                                            <h6 class="mb-0">👑 Full Control</h6>
-                                        </div>
-                                        <ul class="list-unstyled">
-                                            <li><i class="fas fa-check text-success me-2"></i>All Co-owner permissions</li>
-                                            <li><i class="fas fa-check text-success me-2"></i>Role Assignment & Management</li>
-                                            <li><i class="fas fa-check text-success me-2"></i>Bot Room & Restart Control</li>
-                                            <li><i class="fas fa-check text-success me-2"></i>Bot Outfit Management</li>
-                                            <li><i class="fas fa-check text-success me-2"></i>Complete System Access</li>
-                                        </ul>
+                                    <div class="permission-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Room Moderation (kick, Ban, Mute, Freeze)</span>
+                                    </div>
+                                    <div class="permission-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Reactions</span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="alert alert-info mt-3">
-                                <i class="fas fa-info-circle me-2"></i>
-                                <strong>Note:</strong> Role permissions are hierarchical - higher roles inherit all permissions from lower roles. Only Owners can assign and remove roles.
+
+                            <!-- Senior Admin Role -->
+                            <div class="permission-card senior-admin-card">
+                                <div class="permission-card-header">
+                                    <div class="role-icon">🦅</div>
+                                    <div class="role-info">
+                                        <span class="role-badge role-senior-admin">Senior Admin</span>
+                                        <h3>Advanced Management</h3>
+                                    </div>
+                                </div>
+                                <div class="permission-list">
+                                    <div class="permission-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>All Moderator permissions</span>
+                                    </div>
+                                    <div class="permission-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Teleport Management</span>
+                                    </div>
+                                    <div class="permission-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Loop Messages & Cooldowns</span>
+                                    </div>
+                                    <div class="permission-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Join/Leave Messages</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Co-owner Role -->
+                            <div class="permission-card co-owner-card">
+                                <div class="permission-card-header">
+                                    <div class="role-icon">🛡️</div>
+                                    <div class="role-info">
+                                        <span class="role-badge role-co-owner">Co-owner</span>
+                                        <h3>System Control</h3>
+                                    </div>
+                                </div>
+                                <div class="permission-list">
+                                    <div class="permission-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>All Senior Admin permissions</span>
+                                    </div>
+                                    <div class="permission-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>VIP Management</span>
+                                    </div>
+                                    <div class="permission-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Broadcast Messages</span>
+                                    </div>
+                                    <div class="permission-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Tip System Management</span>
+                                    </div>
+                                    <div class="permission-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Dancefloor Setup</span>
+                                    </div>
+                                    <div class="permission-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Chat & Time Clearing</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Owner Role -->
+                            <div class="permission-card owner-card">
+                                <div class="permission-card-header">
+                                    <div class="role-icon">👑</div>
+                                    <div class="role-info">
+                                        <span class="role-badge role-owner">Owner</span>
+                                        <h3>Full Control</h3>
+                                    </div>
+                                </div>
+                                <div class="permission-list">
+                                    <div class="permission-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>All Co-owner permissions</span>
+                                    </div>
+                                    <div class="permission-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Role Assignment & Management</span>
+                                    </div>
+                                    <div class="permission-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Bot Room & Restart Control</span>
+                                    </div>
+                                    <div class="permission-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Bot Outfit Management</span>
+                                    </div>
+                                    <div class="permission-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Complete System Access</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="permissions-note">
+                            <div class="note-content">
+                                <i class="fas fa-info-circle"></i>
+                                <div>
+                                    <strong>Note:</strong> Role permissions are hierarchical - higher roles inherit all permissions from lower roles. Only Owners can assign and remove roles.
+                                </div>
                             </div>
                         </div>
                     </div>
