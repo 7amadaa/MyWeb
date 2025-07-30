@@ -2008,27 +2008,44 @@
                 submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Sending...';
                 submitBtn.disabled = true;
                 
+                console.log('Sending purchase request:', purchaseRequest);
+                console.log('Bin URL:', getBinUrl());
+                console.log('Headers:', getHeaders());
+                
                 // Get existing requests from server
                 const response = await fetch(getBinUrl(), {
                     method: 'GET',
                     headers: getHeaders()
                 });
                 
+                console.log('GET Response status:', response.status);
+                console.log('GET Response ok:', response.ok);
+                
                 let existingRequests = [];
                 if (response.ok) {
                     const data = await response.json();
-                    // Check if data is an array directly or has a record property
+                    console.log('GET Response data:', data);
+                    
+                    // Handle both data formats
                     if (Array.isArray(data)) {
                         existingRequests = data;
+                        console.log('Using data as direct array');
                     } else if (data.record && Array.isArray(data.record)) {
                         existingRequests = data.record;
+                        console.log('Using data.record');
                     } else {
                         existingRequests = [];
+                        console.log('No valid data found, using empty array');
                     }
+                    
+                    console.log('Existing requests:', existingRequests);
+                } else {
+                    console.error('GET request failed:', response.status, response.statusText);
                 }
                 
                 // Add new request
                 existingRequests.push(purchaseRequest);
+                console.log('Updated requests array:', existingRequests);
                 
                 // Save back to server
                 const updateResponse = await fetch(getBinUrl(), {
@@ -2036,6 +2053,9 @@
                     headers: getHeaders(),
                     body: JSON.stringify(existingRequests)
                 });
+                
+                console.log('PUT Response status:', updateResponse.status);
+                console.log('PUT Response ok:', updateResponse.ok);
                 
                 if (updateResponse.ok) {
                     // Show success message
@@ -2050,6 +2070,8 @@
                         modal.hide();
                     }
                 } else {
+                    const errorText = await updateResponse.text();
+                    console.error('PUT request failed:', errorText);
                     throw new Error('Failed to save request');
                 }
             } catch (error) {
