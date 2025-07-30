@@ -1,7 +1,7 @@
 // Configuration for JSONBin.io storage
 const CONFIG = {
-    JSONBIN_API_KEY: '$2a$10$$2a$10$8PZ2/XKleazeAypDa7P6zukUR/Pk2Eay07guUQAWc1aJwbfk28Ij2', // You'll need to replace this with your actual API key
-    JSONBIN_BIN_ID: '688a2dacae596e708fbe4d60 ', // You'll need to replace this with your actual bin ID
+    JSONBIN_API_KEY: '$2a$10$8PZ2/XKleazeAypDa7P6zukUR/Pk2Eay07guUQAWc1aJwbfk28Ij2', // Your actual API key
+    JSONBIN_BIN_ID: '688a2dacae596e708fbe4d60', // Your actual bin ID (removed extra space)
     JSONBIN_URL: 'https://api.jsonbin.io/v3/b'
 };
 
