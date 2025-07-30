@@ -363,6 +363,9 @@
                     const data = await response.json();
                     console.log('Response data:', data);
                     requests = data.record || [];
+                    console.log('Requests array:', requests);
+                    console.log('Requests length:', requests.length);
+                    console.log('Requests type:', typeof requests);
                 } else {
                     console.error('Response not ok:', response.status, response.statusText);
                     const errorText = await response.text();
@@ -372,11 +375,14 @@
                 const container = document.getElementById('requestsContainer');
                 
                 // Update stats
+                console.log('Setting total requests to:', requests.length);
                 document.getElementById('totalRequests').textContent = requests.length;
                 document.getElementById('pendingRequests').textContent = requests.filter(r => !r.completed).length;
                 document.getElementById('completedRequests').textContent = requests.filter(r => r.completed).length;
                 
+                console.log('Checking if requests is empty. Length:', requests.length);
                 if (requests.length === 0) {
+                    console.log('Requests is empty, showing empty state');
                     container.innerHTML = `
                         <div class="empty-state">
                             <i class="fas fa-inbox"></i>
@@ -385,6 +391,8 @@
                         </div>
                     `;
                     return;
+                } else {
+                    console.log('Requests is NOT empty, will display requests');
                 }
                 
                 // Sort requests by date (newest first)
