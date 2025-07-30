@@ -362,7 +362,14 @@
                 if (response.ok) {
                     const data = await response.json();
                     console.log('Response data:', data);
-                    requests = data.record || [];
+                    // Check if data is an array directly or has a record property
+                    if (Array.isArray(data)) {
+                        requests = data;
+                    } else if (data.record && Array.isArray(data.record)) {
+                        requests = data.record;
+                    } else {
+                        requests = [];
+                    }
                     console.log('Requests array:', requests);
                     console.log('Requests length:', requests.length);
                     console.log('Requests type:', typeof requests);
@@ -444,7 +451,14 @@
                 let requests = [];
                 if (response.ok) {
                     const data = await response.json();
-                    requests = data.record || [];
+                    // Check if data is an array directly or has a record property
+                    if (Array.isArray(data)) {
+                        requests = data;
+                    } else if (data.record && Array.isArray(data.record)) {
+                        requests = data.record;
+                    } else {
+                        requests = [];
+                    }
                 }
                 
                 requests[index].completed = true;
@@ -553,7 +567,14 @@
                 if (response.ok) {
                     const data = await response.json();
                     console.log('Data:', data);
-                    showAlert(`Connection successful! Found ${data.record ? data.record.length : 0} requests.`, 'success');
+                    // Check if data is an array directly or has a record property
+                    let requestCount = 0;
+                    if (Array.isArray(data)) {
+                        requestCount = data.length;
+                    } else if (data.record && Array.isArray(data.record)) {
+                        requestCount = data.record.length;
+                    }
+                    showAlert(`Connection successful! Found ${requestCount} requests.`, 'success');
                 } else {
                     const errorText = await response.text();
                     console.error('Error:', errorText);
