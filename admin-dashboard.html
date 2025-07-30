@@ -493,7 +493,14 @@
                     let requests = [];
                     if (response.ok) {
                         const data = await response.json();
-                        requests = data.record || [];
+                        // Check if data is an array directly or has a record property
+                        if (Array.isArray(data)) {
+                            requests = data;
+                        } else if (data.record && Array.isArray(data.record)) {
+                            requests = data.record;
+                        } else {
+                            requests = [];
+                        }
                     }
                     
                     requests.splice(index, 1);
