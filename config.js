@@ -14,7 +14,6 @@ function getBinUrl() {
 function getHeaders() {
     return {
         'Content-Type': 'application/json',
-        'X-Master-Key': CONFIG.JSONBIN_API_KEY,
-        'X-Bin-Meta': 'false'
+        'X-Master-Key': CONFIG.JSONBIN_API_KEY
     };
 } 
