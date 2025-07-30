@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - TheoBot</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #f59e0b;
+            --success-color: #10b981;
+            --danger-color: #ef4444;
+            --warning-color: #f59e0b;
+            --info-color: #3b82f6;
+            --dark-color: #1f2937;
+            --light-color: #f9fafb;
+            --border-color: #e5e7eb;
+            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-secondary: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+            --gradient-accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            line-height: 1.6; 
+            color: var(--dark-color); 
+            background: var(--gradient-primary);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .navbar { 
+            background: rgba(255, 255, 255, 0.95); 
+            backdrop-filter: blur(20px); 
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2); 
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); 
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .navbar-brand { 
+            font-weight: 800; 
+            font-size: 1.8rem; 
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .main-content {
+            padding: 2rem 0;
+            min-height: calc(100vh - 80px);
+        }
+        
+        .dashboard-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 2rem;
+        }
+        
+        .dashboard-header {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 2rem;
+            border-radius: 20px 20px 0 0;
+            text-align: center;
+        }
+        
+        .dashboard-body {
+            padding: 2rem;
+        }
+        
+        .stats-card {
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8f2ff 100%);
+            border: 2px solid #e3f2fd;
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stats-label {
+            color: #6b7280;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+        
+        .request-card {
+            background: white;
+            border-radius: 15px;
+            border: 1px solid #e5e7eb;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .request-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .request-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        
+        .request-username {
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+        
+        .request-date {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+        
+        .request-message {
+            color: #374151;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        
+        .request-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn-action {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-mark-completed {
+            background: var(--success-color);
+            color: white;
+            border: none;
+        }
+        
+        .btn-mark-completed:hover {
+            background: #059669;
+            color: white;
+            transform: translateY(-1px);
+        }
+        
+        .btn-delete {
+            background: var(--danger-color);
+            color: white;
+            border: none;
+        }
+        
+        .btn-delete:hover {
+            background: #dc2626;
+            color: white;
+            transform: translateY(-1px);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #6b7280;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            color: #d1d5db;
+            margin-bottom: 1rem;
+        }
+        
+        .alert {
+            border-radius: 10px;
+            border: none;
+            margin-bottom: 1rem;
+        }
+        
+        .logout-btn {
+            background: var(--danger-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .logout-btn:hover {
+            background: #dc2626;
+            color: white;
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-robot me-2"></i>TheoBot Admin
+            </a>
+            <div class="navbar-nav ms-auto">
+                <span class="navbar-text me-3">
+                    <i class="fas fa-user me-2"></i>Welcome, <span id="adminUsername"></span>
+                </span>
+                <button class="btn logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container">
+            <!-- Dashboard Header -->
+            <div class="dashboard-card">
+                <div class="dashboard-header">
+                    <h1><i class="fas fa-tachometer-alt me-3"></i>Admin Dashboard</h1>
+                    <p class="mb-0">Manage TheoBot purchase requests</p>
+                </div>
+                <div class="dashboard-body">
+                    <div id="alertContainer"></div>
+                    
+                    <!-- Stats Row -->
+                    <div class="row mb-4">
+                        <div class="col-lg-4 col-md-6 mb-3">
+                            <div class="stats-card">
+                                <i class="fas fa-inbox mb-3" style="font-size: 2rem; color: var(--primary-color);"></i>
+                                <div class="stats-number" id="totalRequests">0</div>
+                                <div class="stats-label">Total Requests</div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-6 mb-3">
+                            <div class="stats-card">
+                                <i class="fas fa-clock mb-3" style="font-size: 2rem; color: var(--warning-color);"></i>
+                                <div class="stats-number" id="pendingRequests">0</div>
+                                <div class="stats-label">Pending</div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-6 mb-3">
+                            <div class="stats-card">
+                                <i class="fas fa-check-circle mb-3" style="font-size: 2rem; color: var(--success-color);"></i>
+                                <div class="stats-number" id="completedRequests">0</div>
+                                <div class="stats-label">Completed</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Actions Row -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h3><i class="fas fa-list me-2"></i>Purchase Requests</h3>
+                                <div>
+                                    <button class="btn btn-outline-primary me-2" onclick="refreshRequests()">
+                                        <i class="fas fa-sync-alt me-2"></i>Refresh
+                                    </button>
+                                    <button class="btn btn-outline-danger" onclick="clearAllRequests()">
+                                        <i class="fas fa-trash me-2"></i>Clear All
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Requests List -->
+                    <div id="requestsContainer">
+                        <!-- Requests will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Check if admin is logged in
+        function checkAuth() {
+            const isLoggedIn = localStorage.getItem('adminLoggedIn');
+            if (!isLoggedIn || isLoggedIn !== 'true') {
+                window.location.href = 'admin-login.html';
+                return;
+            }
+            
+            const username = localStorage.getItem('adminUsername');
+            document.getElementById('adminUsername').textContent = username || 'Admin';
+        }
+        
+        // Load purchase requests
+        function loadRequests() {
+            const requests = JSON.parse(localStorage.getItem('purchaseRequests') || '[]');
+            const container = document.getElementById('requestsContainer');
+            
+            // Update stats
+            document.getElementById('totalRequests').textContent = requests.length;
+            document.getElementById('pendingRequests').textContent = requests.filter(r => !r.completed).length;
+            document.getElementById('completedRequests').textContent = requests.filter(r => r.completed).length;
+            
+            if (requests.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-inbox"></i>
+                        <h4>No purchase requests yet</h4>
+                        <p>When users submit purchase requests, they will appear here.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Sort requests by date (newest first)
+            requests.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            container.innerHTML = requests.map((request, index) => `
+                <div class="request-card ${request.completed ? 'opacity-75' : ''}">
+                    <div class="request-header">
+                        <div>
+                            <div class="request-username">
+                                <i class="fas fa-user me-2"></i>${request.username}
+                                ${request.completed ? '<span class="badge bg-success ms-2">Completed</span>' : '<span class="badge bg-warning ms-2">Pending</span>'}
+                            </div>
+                            <div class="request-date">
+                                <i class="fas fa-calendar me-2"></i>${new Date(request.date).toLocaleString()}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="request-message">
+                        <strong>Message:</strong><br>
+                        ${request.message}
+                    </div>
+                    <div class="request-actions">
+                        ${!request.completed ? 
+                            `<button class="btn btn-action btn-mark-completed" onclick="markCompleted(${index})">
+                                <i class="fas fa-check me-2"></i>Mark Completed
+                            </button>` : ''
+                        }
+                        <button class="btn btn-action btn-delete" onclick="deleteRequest(${index})">
+                            <i class="fas fa-trash me-2"></i>Delete
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Mark request as completed
+        function markCompleted(index) {
+            const requests = JSON.parse(localStorage.getItem('purchaseRequests') || '[]');
+            requests[index].completed = true;
+            localStorage.setItem('purchaseRequests', JSON.stringify(requests));
+            loadRequests();
+            showAlert('Request marked as completed', 'success');
+        }
+        
+        // Delete request
+        function deleteRequest(index) {
+            if (confirm('Are you sure you want to delete this request?')) {
+                const requests = JSON.parse(localStorage.getItem('purchaseRequests') || '[]');
+                requests.splice(index, 1);
+                localStorage.setItem('purchaseRequests', JSON.stringify(requests));
+                loadRequests();
+                showAlert('Request deleted successfully', 'success');
+            }
+        }
+        
+        // Clear all requests
+        function clearAllRequests() {
+            if (confirm('Are you sure you want to delete all requests? This action cannot be undone.')) {
+                localStorage.removeItem('purchaseRequests');
+                loadRequests();
+                showAlert('All requests cleared successfully', 'success');
+            }
+        }
+        
+        // Refresh requests
+        function refreshRequests() {
+            loadRequests();
+            showAlert('Requests refreshed', 'info');
+        }
+        
+        // Logout
+        function logout() {
+            localStorage.removeItem('adminLoggedIn');
+            localStorage.removeItem('adminUsername');
+            window.location.href = 'admin-login.html';
+        }
+        
+        // Show alert
+        function showAlert(message, type = 'info') {
+            const alertContainer = document.getElementById('alertContainer');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.innerHTML = `<i class="fas fa-${type === 'success' ? 'check' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'} me-2"></i>${message}`;
+            alertContainer.appendChild(alert);
+            
+            setTimeout(() => {
+                if (alertContainer.contains(alert)) {
+                    alertContainer.removeChild(alert);
+                }
+            }, 5000);
+        }
+        
+        // Initialize dashboard
+        checkAuth();
+        loadRequests();
+        
+        // Auto-refresh every 30 seconds
+        setInterval(loadRequests, 30000);
+    </script>
+</body>
+</html> 
