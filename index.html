@@ -2038,6 +2038,9 @@
                         console.log('No valid data found, using empty array');
                     }
                     
+                    // Filter out placeholder items
+                    existingRequests = existingRequests.filter(item => !item.placeholder);
+                    
                     console.log('Existing requests:', existingRequests);
                 } else {
                     console.error('GET request failed:', response.status, response.statusText);

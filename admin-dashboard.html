@@ -350,16 +350,24 @@
             console.log('Data type:', typeof data);
             console.log('Is Array:', Array.isArray(data));
             
+            let requests = [];
+            
             if (Array.isArray(data)) {
                 console.log('Data is direct array');
-                return data;
+                requests = data;
             } else if (data && data.record && Array.isArray(data.record)) {
                 console.log('Data has record property');
-                return data.record;
+                requests = data.record;
             } else {
                 console.log('No valid data found, returning empty array');
                 return [];
             }
+            
+            // Filter out placeholder items
+            requests = requests.filter(item => !item.placeholder);
+            console.log('Filtered requests (removed placeholders):', requests);
+            
+            return requests;
         }
         
         // Load purchase requests
@@ -567,11 +575,22 @@
             try {
                 console.log('=== CLEARING ALL REQUESTS ===');
                 
-                const response = await fetch(getBinUrl(), {
+                // First, let's try to clear by putting an empty array with a placeholder
+                let response = await fetch(getBinUrl(), {
                     method: 'PUT',
                     headers: getHeaders(),
-                    body: JSON.stringify([])
+                    body: JSON.stringify([{"placeholder": "empty"}])
                 });
+                
+                // If that fails, try with a different approach
+                if (!response.ok) {
+                    console.log('First clear attempt failed, trying alternative...');
+                    response = await fetch(getBinUrl(), {
+                        method: 'PUT',
+                        headers: getHeaders(),
+                        body: JSON.stringify({"requests": []})
+                    });
+                }
                 
                 console.log('Clear response status:', response.status);
                 console.log('Clear response ok:', response.ok);
