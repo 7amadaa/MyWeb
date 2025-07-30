@@ -2017,7 +2017,14 @@
                 let existingRequests = [];
                 if (response.ok) {
                     const data = await response.json();
-                    existingRequests = data.record || [];
+                    // Check if data is an array directly or has a record property
+                    if (Array.isArray(data)) {
+                        existingRequests = data;
+                    } else if (data.record && Array.isArray(data.record)) {
+                        existingRequests = data.record;
+                    } else {
+                        existingRequests = [];
+                    }
                 }
                 
                 // Add new request

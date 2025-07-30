@@ -362,15 +362,22 @@
                 if (response.ok) {
                     const data = await response.json();
                     console.log('Response data:', data);
+                    console.log('Data type:', typeof data);
+                    console.log('Is Array:', Array.isArray(data));
+                    console.log('Has record property:', data.hasOwnProperty('record'));
+                    
                     // Check if data is an array directly or has a record property
                     if (Array.isArray(data)) {
                         requests = data;
+                        console.log('Using data as direct array');
                     } else if (data.record && Array.isArray(data.record)) {
                         requests = data.record;
+                        console.log('Using data.record');
                     } else {
                         requests = [];
+                        console.log('No valid data found, using empty array');
                     }
-                    console.log('Requests array:', requests);
+                    console.log('Final requests array:', requests);
                     console.log('Requests length:', requests.length);
                     console.log('Requests type:', typeof requests);
                 } else {
@@ -451,23 +458,32 @@
                 let requests = [];
                 if (response.ok) {
                     const data = await response.json();
+                    console.log('markCompleted - Response data:', data);
                     // Check if data is an array directly or has a record property
                     if (Array.isArray(data)) {
                         requests = data;
+                        console.log('markCompleted - Using data as direct array');
                     } else if (data.record && Array.isArray(data.record)) {
                         requests = data.record;
+                        console.log('markCompleted - Using data.record');
                     } else {
                         requests = [];
+                        console.log('markCompleted - No valid data found');
                     }
+                    console.log('markCompleted - Requests before update:', requests);
                 }
                 
                 requests[index].completed = true;
+                console.log('markCompleted - Requests after update:', requests);
                 
                 const updateResponse = await fetch(getBinUrl(), {
                     method: 'PUT',
                     headers: getHeaders(),
                     body: JSON.stringify(requests)
                 });
+                
+                console.log('markCompleted - Update response status:', updateResponse.status);
+                console.log('markCompleted - Update response ok:', updateResponse.ok);
                 
                 if (updateResponse.ok) {
                     loadRequests();
@@ -493,23 +509,32 @@
                     let requests = [];
                     if (response.ok) {
                         const data = await response.json();
+                        console.log('deleteRequest - Response data:', data);
                         // Check if data is an array directly or has a record property
                         if (Array.isArray(data)) {
                             requests = data;
+                            console.log('deleteRequest - Using data as direct array');
                         } else if (data.record && Array.isArray(data.record)) {
                             requests = data.record;
+                            console.log('deleteRequest - Using data.record');
                         } else {
                             requests = [];
+                            console.log('deleteRequest - No valid data found');
                         }
+                        console.log('deleteRequest - Requests before delete:', requests);
                     }
                     
                     requests.splice(index, 1);
+                    console.log('deleteRequest - Requests after delete:', requests);
                     
                     const updateResponse = await fetch(getBinUrl(), {
                         method: 'PUT',
                         headers: getHeaders(),
                         body: JSON.stringify(requests)
                     });
+                    
+                    console.log('deleteRequest - Update response status:', updateResponse.status);
+                    console.log('deleteRequest - Update response ok:', updateResponse.ok);
                     
                     if (updateResponse.ok) {
                         loadRequests();
