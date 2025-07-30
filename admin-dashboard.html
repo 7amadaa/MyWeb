@@ -306,6 +306,9 @@
                                     <button class="btn btn-outline-primary me-2" onclick="refreshRequests()">
                                         <i class="fas fa-sync-alt me-2"></i>Refresh
                                     </button>
+                                    <button class="btn btn-outline-info me-2" onclick="testConnection()">
+                                        <i class="fas fa-bug me-2"></i>Test Connection
+                                    </button>
                                     <button class="btn btn-outline-danger" onclick="clearAllRequests()">
                                         <i class="fas fa-trash me-2"></i>Clear All
                                     </button>
@@ -344,15 +347,26 @@
         // Load purchase requests
         async function loadRequests() {
             try {
+                console.log('Loading requests from:', getBinUrl());
+                console.log('Headers:', getHeaders());
+                
                 const response = await fetch(getBinUrl(), {
                     method: 'GET',
                     headers: getHeaders()
                 });
                 
+                console.log('Response status:', response.status);
+                console.log('Response ok:', response.ok);
+                
                 let requests = [];
                 if (response.ok) {
                     const data = await response.json();
+                    console.log('Response data:', data);
                     requests = data.record || [];
+                } else {
+                    console.error('Response not ok:', response.status, response.statusText);
+                    const errorText = await response.text();
+                    console.error('Error response:', errorText);
                 }
                 
                 const container = document.getElementById('requestsContainer');
@@ -508,6 +522,39 @@
         function refreshRequests() {
             loadRequests();
             showAlert('Requests refreshed', 'info');
+        }
+        
+        // Test connection to JSONBin.io
+        async function testConnection() {
+            try {
+                showAlert('Testing connection...', 'info');
+                console.log('=== TESTING CONNECTION ===');
+                console.log('Config:', CONFIG);
+                console.log('Bin URL:', getBinUrl());
+                console.log('Headers:', getHeaders());
+                
+                const response = await fetch(getBinUrl(), {
+                    method: 'GET',
+                    headers: getHeaders()
+                });
+                
+                console.log('Response:', response);
+                console.log('Status:', response.status);
+                console.log('OK:', response.ok);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Data:', data);
+                    showAlert(`Connection successful! Found ${data.record ? data.record.length : 0} requests.`, 'success');
+                } else {
+                    const errorText = await response.text();
+                    console.error('Error:', errorText);
+                    showAlert(`Connection failed: ${response.status} ${response.statusText}`, 'danger');
+                }
+            } catch (error) {
+                console.error('Test connection error:', error);
+                showAlert(`Connection error: ${error.message}`, 'danger');
+            }
         }
         
         // Logout
